@@ -1,37 +1,42 @@
-document.getElementById('upload').addEventListener('change', function(e) {
-    Papa.parse(e.target.files[0], {
-        header: true,
-        complete: function(results) {
-            processData(results.data);
-        }
-    });
-});
 
-function processData(data) {
-    const container = document.getElementById('results');
-    container.innerHTML = '';
-    
-    data.forEach(row => {
-        if(!row.Zona) return;
-        
-        // CÁLCULO AUTOMÁTICO
-        let densidad = parseFloat(row.Personas) / parseFloat(row.Tiempo);
+// Datos extraídos de tu Plantilla (Simulación de carga)
+const datosMerchandising = [
+    { zona: 1, nombre: "Entrada", personas: 48, tiempo: 30 },
+    { zona: 2, nombre: "Pasillo central", personas: 65, tiempo: 30 },
+    { zona: 3, nombre: "Promociones", personas: 52, tiempo: 30 },
+    { zona: 4, nombre: "Lateral izquierdo", personas: 18, tiempo: 30 },
+    { zona: 5, nombre: "Fondo", personas: 10, tiempo: 30 },
+    { zona: 6, nombre: "Caja / Salida", personas: 40, tiempo: 30 }
+];
+
+function resolverSistema() {
+    const contenedor = document.getElementById('dataOutput');
+    let html = `
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr><th>Zona</th><th>Densidad</th><th>Estado</th><th>Estrategia Sugerida</th></tr>
+        </thead>
+        <tbody>`;
+
+    datosMerchandising.forEach(d => {
+        // CÁLCULO MATEMÁTICO DEL SISTEMA
+        let densidad = (d.personas / (d.tiempo / 60)).toFixed(2); // Ajuste a personas/min
         let esCaliente = densidad > 1.0;
-        
-        // LÓGICA DE RESOLUCIÓN (IA INTEGRADA)
         let estrategia = esCaliente 
-            ? "Zona Caliente: Ubicar productos de impulso en pasillo central." 
-            : "Zona Fría: Mover productos clase A (Imán) para atraer tráfico.";
+            ? "Zona Caliente: Optimizar producto de impulso." 
+            : "Zona Fría: Aplicar 'producto imán' (Clase A).";
 
-        container.innerHTML += `
-            <div class="col-md-4 mb-3">
-                <div class="card ${esCaliente ? 'border-danger' : 'border-primary'}">
-                    <div class="card-body">
-                        <h5>Zona ${row.Zona}</h5>
-                        <p>Densidad: ${densidad.toFixed(2)}</p>
-                        <small>${estrategia}</small>
-                    </div>
-                </div>
-            </div>`;
+        html += `<tr>
+            <td>${d.nombre}</td>
+            <td>${densidad}</td>
+            <td>${esCaliente ? "🔥 Caliente" : "❄️ Fría"}</td>
+            <td>${estrategia}</td>
+        </tr>`;
     });
+
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
 }
+
+// Ejecutar al cargar la página
+document.addEventListener('DOMContentLoaded', resolverSistema);
