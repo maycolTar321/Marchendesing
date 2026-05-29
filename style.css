@@ -1,0 +1,9 @@
+:root { --accent: #2c3e50; --gold: #c5a059; }
+body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f4f7f6; color: #333; }
+.card-brand { 
+    background: white; border-radius: 15px; padding: 30px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-top: 6px solid var(--accent);
+}
+footer { margin-top: 80px; padding: 40px; text-align: center; color: var(--accent); }
+.brand-name { font-size: 1.4rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
